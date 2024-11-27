@@ -1,0 +1,36 @@
+/* General Button Styles */
+.custom-button {
+    display: inline-block;
+    width: 250px; /* Default width */
+    height: 60px; /* Default height */
+    padding: 10px 20px;
+    background-color: #00796b; /* Background color */
+    color: white; /* Text color */
+    font-size: 16px; /* Font size */
+    text-align: center;
+    border: none;
+    border-radius: 8px; /* Rounded corners */
+    margin: 10px; /* Spacing between buttons */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Hover Effect */
+  .custom-button:hover {
+    background-color: #004d40;
+  }
+  
+  /* Mobile Responsiveness (For Width 600px or Less) */
+  @media (max-width: 600px) {
+    .custom-button {
+      width: 379px; /* Mobile-specific width */
+      height: 54px; /* Mobile-specific height */
+      font-size: 14px; /* Slightly smaller font for mobile */
+    }
+  
+    .button-container {
+      text-align: center; /* Ensure buttons stay centered */
+    }
+  }
+  
+  /* Add any other styles below this */
