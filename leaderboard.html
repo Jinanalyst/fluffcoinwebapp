@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leaderboard</title>
+  <style>
+    /* General Styles */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    /* Navigation Menu Styling */
+    .nav {
+      text-align: center;
+      margin-bottom: 20px;
+      background-color: #00796b;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: white;
+      margin: 10px 20px;
+      font-size: 18px;
+    }
+
+    .nav a:hover {
+      color: #004d40;
+    }
+
+    /* Banner Styling */
+    .banner {
+      width: 100%;
+      height: auto;
+      margin-bottom: 20px;
+      border-radius: 10px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    /* Leaderboard Styling */
+    .leaderboard {
+      max-width: 100%;
+      margin: 0 auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      overflow-x: auto; /* Allows horizontal scroll if needed */
+    }
+
+    .leaderboard table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .leaderboard th, .leaderboard td {
+      padding: 10px;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+
+    .leaderboard th {
+      background-color: #00796b;
+      color: white;
+    }
+
+    .leaderboard td {
+      background-color: #f9f9f9;
+    }
+
+    .leaderboard .rank {
+      font-weight: bold;
+    }
+
+    /* User's Click Count Display */
+    .clicks-info {
+      font-size: 20px;
+      color: #00796b;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    /* Media Query for Mobile */
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+
+      .nav a {
+        font-size: 16px;
+      }
+
+      .banner {
+        width: 100%;
+      }
+
+      .leaderboard {
+        padding: 15px;
+      }
+
+      .leaderboard th, .leaderboard td {
+        padding: 8px;
+        font-size: 14px;
+      }
+
+      .clicks-info {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Menu -->
+  <div class="nav">
+    <a href="index.html">Home</a>
+    <a href="wallet.html">Wallet</a>
+    <a href="leaderboard.html">Leaderboard</a>
+  </div>
+
+  <!-- Banner Image -->
+  <img src="banner3.jpeg" alt="Leaderboard Banner" class="banner">
+
+  <h1>Rankings</h1>
+
+  <!-- Display User Click Count -->
+  <div class="clicks-info">
+    Your Clicks: <span id="clickCountDisplay">0</span>
+  </div>
+
+  <!-- Leaderboard Table -->
+  <div class="leaderboard">
+    <table>
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>User</th>
+          <th>Clicks</th>
+        </tr>
+      </thead>
+      <tbody id="leaderboard-table-body">
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    // Retrieve the click counts for all users from localStorage
+    let userClickCounts = JSON.parse(localStorage.getItem('userClickCounts')) || [];
+
+    // Retrieve the current user's click count from localStorage
+    let currentUserClickCount = parseInt(localStorage.getItem('clickCount')) || 0;
+
+    // Display the current user's click count on the leaderboard page
+    document.getElementById('clickCountDisplay').innerText = currentUserClickCount;
+
+    // Add or update the current user in the user click counts list
+    let currentUser = 'User'; // You can dynamically change this if needed
+    let existingUser = userClickCounts.find(user => user.name === currentUser);
+    if (existingUser) {
+      existingUser.clicks = currentUserClickCount;
+    } else {
+      userClickCounts.push({ name: currentUser, clicks: currentUserClickCount });
+    }
+
+    // Sort the users by the number of clicks in descending order
+    userClickCounts.sort((a, b) => b.clicks - a.clicks);
+
+    // Store the updated user list back to localStorage
+    localStorage.setItem('userClickCounts', JSON.stringify(userClickCounts));
+
+    // Populate the leaderboard table
+    let leaderboardTableBody = document.getElementById('leaderboard-table-body');
+    userClickCounts.forEach((user, index) => {
+      let row = document.createElement('tr');
+      row.innerHTML = `
+        <td class="rank">${index + 1}</td>
+        <td>${user.name}</td>
+        <td>${user.clicks}</td>
+      `;
+      leaderboardTableBody.appendChild(row);
+    });
+  </script>
+
+</body>
+</html>
