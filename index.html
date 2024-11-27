@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fluffcoin Home</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .nav {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: #00796b;
+      margin: 10px 20px;
+      font-size: 18px;
+    }
+
+    .nav a:hover {
+      color: #004d40;
+    }
+
+    .banner {
+      width: 100%;
+      height: auto;
+      max-width: 100%;
+      display: block;
+      margin: 20px 0;
+      border-radius: 10px;
+    }
+
+    /* Button Styling */
+    .button {
+      display: inline-block;
+      padding: 15px 30px;
+      background-color: #00796b;
+      color: white;
+      font-size: 18px;
+      text-decoration: none;
+      border-radius: 5px;
+      margin: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      width: 250px; /* Ensure all buttons are the same width */
+    }
+
+    .button:hover {
+      background-color: #004d40;
+    }
+
+    /* Centering and spacing for buttons */
+    .button-container {
+      text-align: center;
+      margin-top: 20px; /* Adjusted to reduce space */
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 600px) {
+      .container {
+        padding: 10px;
+      }
+
+      .banner {
+        margin-bottom: 15px;
+      }
+
+      .button-container .button {
+        width: 100%;
+        padding: 15px;
+      }
+    }
+
+    .balance {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 24px;
+      color: #00796b;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Fluffcoin Community</h1>
+
+    <!-- Navigation Links -->
+    <div class="nav">
+      <a href="index.html">Home</a>
+      <a href="wallet.html">Wallet</a>
+      <a href="leaderboard.html">Leaderboard</a>
+    </div>
+
+    <!-- Banner Image -->
+    <img src="banner.jpeg" alt="Home Banner" class="banner">
+
+    <!-- Fluffcoin Balance -->
+    <div class="balance">
+      <p>Current Fluffcoin Balance: <span id="fluffcoin-balance">0</span> FLF</p>
+    </div>
+
+    <!-- Tap to Earn Button -->
+    <div class="content button-container">
+      <p>Tap the button below to earn Fluffcoin!</p>
+      <button onclick="earnFluffcoin()" class="button">Tap to Earn</button>
+    </div>
+
+    <!-- Other links for wallet and leaderboard -->
+    <div class="content button-container">
+      <a href="wallet.html" class="button">Go to Wallet</a>
+      <a href="leaderboard.html" class="button">Leaderboard</a>
+    </div>
+  </div>
+
+  <script>
+    // Retrieve Fluffcoin balance and click count from localStorage
+    let fluffcoinBalance = parseInt(localStorage.getItem('fluffcoinBalance')) || 0;
+    let currentUserClickCount = parseInt(localStorage.getItem('clickCount')) || 0;
+
+    // Display initial Fluffcoin balance
+    document.getElementById('fluffcoin-balance').textContent = fluffcoinBalance;
+
+    // Update balance and click count when the user clicks the "Tap to Earn" button
+    function earnFluffcoin() {
+      fluffcoinBalance += 10;  // Increment by 10 FLF
+      currentUserClickCount++; // Increment the click count
+
+      // Update the Fluffcoin balance on the page
+      document.getElementById('fluffcoin-balance').textContent = fluffcoinBalance;
+
+      // Save the updated Fluffcoin balance and click count to localStorage
+      localStorage.setItem('fluffcoinBalance', fluffcoinBalance);
+      localStorage.setItem('clickCount', currentUserClickCount);
+
+      // Optionally, you can display a message
+      alert('You earned 10 Fluffcoin!');
+    }
+
+    // Sync the leaderboard with the user's click count
+    function updateLeaderboard() {
+      let userClickCounts = JSON.parse(localStorage.getItem('userClickCounts')) || [];
+      let currentUser = 'User'; // This could be dynamic if you have a user login system
+      let userFound = false;
+
+      for (let i = 0; i < userClickCounts.length; i++) {
+        if (userClickCounts[i].name === currentUser) {
+          userClickCounts[i].clicks = currentUserClickCount;
+          userFound = true;
+          break;
+        }
+      }
+
+      if (!userFound) {
+        userClickCounts.push({ name: currentUser, clicks: currentUserClickCount });
+      }
+
+      userClickCounts.sort((a, b) => b.clicks - a.clicks);
+
+      localStorage.setItem('userClickCounts', JSON.stringify(userClickCounts));
+
+      alert('Leaderboard updated!');
+    }
+
+    updateLeaderboard();
+  </script>
+
+</body>
+</html>
